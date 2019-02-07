@@ -3,8 +3,12 @@
 .flaskenv
 *.pyc
 *.pyo
+venv/
+venv*
 dist/
 build/
+__pycache__*
+__pycache__/
 *.egg
 *.egg-info/
 _mailinglist
