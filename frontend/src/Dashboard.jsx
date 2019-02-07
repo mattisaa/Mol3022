@@ -55,7 +55,7 @@ export default class Dashboard extends React.Component {
 
     render () {
 
-        const activeStep = this.state;
+        const { activeStep } = this.state;
         const steps = this.getSteps();
         console.log(steps);
         console.log(activeStep);
