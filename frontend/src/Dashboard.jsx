@@ -23,10 +23,11 @@ export default class Dashboard extends React.Component {
 
     state = {
         activeStep:0,
+        hello: ''
     };
 
     componentDidMount() {
-      get('').then(e => console.log(e));
+      get('').then(({data}) => this.setState({hello: data.message}));
     }
 
     handleNext = () => {
@@ -53,11 +54,11 @@ export default class Dashboard extends React.Component {
 
     render () {
 
-        const { activeStep } = this.state;
+        const { activeStep, hello } = this.state;
         const steps = this.getSteps();
         return(
           <div>
-            <AppBar className="header" color="primary" >hei</AppBar>
+            <AppBar className="header" color="primary" >{hello}</AppBar>
             <Stepper className="stepper" activeStep={activeStep} orientation="horizontal" alternativeLabel={true} >
              {steps.map((label) => {
                 return (
