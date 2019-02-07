@@ -80,6 +80,7 @@ export default class Dashboard extends React.Component {
                 variant="contained"
                 color="primary"
                 onClick={this.handleNext}
+                disabled={activeStep === 3}
               >
                 {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
               </Button>
