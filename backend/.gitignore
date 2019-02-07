@@ -3,8 +3,6 @@
 .flaskenv
 *.pyc
 *.pyo
-venv/
-venv*
 dist/
 build/
 *.egg
