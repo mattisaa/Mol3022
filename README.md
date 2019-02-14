@@ -1,14 +1,13 @@
 # MOL3022
 
-##  Running.
-
-### Backend:
+## Backend:
 
 #### Dependencies:
 - Python3.7
 - pip[10.0 - 19.0.2]
 - virtualenv
 
+#### Initial setup
 ```
 cd backend/
 python3 -m venv venv
@@ -17,11 +16,12 @@ pip install -r requirements.txt
 python run.py
 ```
 
-### Frontend:
+## Frontend:
 
 #### Dependencies:
 - yarn (npm install -g yarn)
 
+#### Initial setup
 ```
 cd frontend/
 yarn
