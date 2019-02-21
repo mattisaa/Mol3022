@@ -27,7 +27,7 @@ export default class Dashboard extends React.Component {
     };
 
     componentDidMount() {
-      get('').then(({data}) => this.setState({hello: data.message}));
+      get('bedtools').then((res) => console.log(res));
     }
 
     handleNext = () => {

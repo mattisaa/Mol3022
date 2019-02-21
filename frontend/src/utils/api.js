@@ -1,35 +1,35 @@
 import axios from 'axios';
-import { API_URL, BASE_HEADERS } from '../config';
+import { API_URL } from '../config';
 
 const api = axios.create({
   baseURL: API_URL,
-  headers: BASE_HEADERS
+  crossDomain: true,
 });
 
 export function get(url) {
   return api
-    .get(`${url}/`)
+    .get(`${url}`)
     .then(res => res)
     .catch(err => err.response);
 }
 
 export function put(url, data) {
   return api
-    .put(`${url}/`, data)
+    .put(`${url}`, data)
     .then(res => res)
     .catch(err => err.response);
 }
 
 export function post(url, body) {
   return api
-    .post(`${url}/`, body)
+    .post(`${url}`, body)
     .then(res => res)
     .catch(err => err.response);
 }
 
 export function remove(url) {
   return api
-    .delete(`${url}/`)
+    .delete(`${url}`)
     .then(res => res)
     .catch(err => err.response);
 }
