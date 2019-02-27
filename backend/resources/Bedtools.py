@@ -5,10 +5,7 @@ from data.data import get_data
 class Bedtools(Resource):
 
     def get(self):
-        exons, cpg = get_data()
-
-        a = pybedtools.example_bedtool('a.bed')
-        b = pybedtools.example_bedtool('b.bed')
-        res = exons.jaccard(cpg)
+        list_of_bedtools = get_data()
+        res = list_of_bedtools[0].jaccard(list_of_bedtools[1])
         print(res)
         return str(res)

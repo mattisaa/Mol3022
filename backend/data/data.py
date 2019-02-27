@@ -1,14 +1,9 @@
-def read_file():
-    genome_string = ''
-    with open('genomes.txt', 'r') as inputfile:
-        for line in inputfile:
-            genome_string += line 
-            print(line)
-    return genome_string
+from data.genomes import get_textfiles
+import pybedtools
 
 def get_data():
-    #exons_bedTool = pybedtools.BedTool(exons_txt, from_string=True)
-    #cpg_bedTool = pybedtools.BedTool(cpg_txt, from_string=True)
-    list_of_genes= read_file()
-    print(list_of_genes)
-    return 0
+    list_of_genoms = get_textfiles()
+    list_of_bedtools = []
+    for genome in list_of_genoms:
+        list_of_bedtools.append(pybedtools.BedTool(genome, from_string=True))
+    return list_of_bedtools
