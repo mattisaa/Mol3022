@@ -4,30 +4,28 @@ import {get} from './utils/api';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
-import Typography from "@material-ui/core/Typography";
-
-
-class ActiveStepContent extends React.Component {
-    render() {
-      return (
-        <StepContent {...this.props}>
-          <Typography>This is active step content.</Typography>
-        </StepContent>
-      );
-    }
-  }
+import Select from 'react-select'
 
 export default class Dashboard extends React.Component {
 
     state = {
         activeStep:0,
-        hello: ''
+        genomes: [],
+        firstSelectedGene: '',
+        secondSelectedGene: '',
+        loading: true
+        
     };
 
     componentDidMount() {
-      get('bedtools').then((res) => console.log(res));
+      get('genomes').then(({data}) => {
+          this.setState({loading:false});
+          const genomes = data.map(genome => {
+            return {label: genome, value: genome};
+          });
+          this.setState({genomes});
+        });
     }
 
     handleNext = () => {
@@ -47,29 +45,78 @@ export default class Dashboard extends React.Component {
           activeStep: 0,
         });
       };
+    
+    firstSelectedGene = (firstGene) => {
+      this.setState({firstSelectedGene : firstGene});
+    };
+
+    secondSelectedGene = (secondGene) => {
+      this.setState({secondSelectedGene : secondGene});
+    };
 
     getSteps = ()  => {
         return ['Step 1', 'Step 2', 'Step 3'];
     };
 
+    getStepContent = (stepIndex) => {
+
+      if (this.state.loading) {
+        return <h3>Henter data..</h3>;
+      }
+      switch (stepIndex) {
+        case 0:
+          const { firstSelectedGene } = this.state.firstSelectedGene;
+          const { secondSelectedGene }= this.state.secondSelectedGene;
+
+          return (
+            <div >
+                <Select 
+                  name = "select genomes"
+                  value = {firstSelectedGene}
+                  onChange = {this.firstSelectedGene}
+                  options = {this.state.genomes}
+                />
+              <Select 
+                name = "select genomes"
+                value = {secondSelectedGene}
+                onChange = {this.secondSelectedGene}
+                options = {this.state.genomes}
+              />
+
+            </div>
+          ); 
+        case 1 :
+          return(
+            <h2>Result of intersecting</h2>
+          );
+
+        case 2:
+          return(
+            <h2>Comparisson to random intersect</h2>
+          );
+      }
+    }
+
     render () {
 
-        const { activeStep, hello } = this.state;
+        const { activeStep } = this.state;
         const steps = this.getSteps();
         return(
           <div>
-            <AppBar className="header" color="primary" >{hello}</AppBar>
-            <Stepper className="stepper" activeStep={activeStep} orientation="horizontal" alternativeLabel={true} >
+            <AppBar className="header" color="primary" ><h3>Intersect genomes app</h3></AppBar>
+            <Stepper className="stepper" activeStep={activeStep}  alternativeLabel={true} >
              {steps.map((label) => {
                 return (
                     <Step key={label}>
                         <StepLabel>{label}</StepLabel>
-                        <ActiveStepContent />
                     </Step>
                 );
              })}
             </Stepper>
-            <div>
+            <div >
+              <div style={{'margin': '40px 30% '}}>
+                {this.getStepContent(activeStep)}
+              </div>
               <Button
                 disabled={activeStep === 0}
                 onClick={this.handleBack}

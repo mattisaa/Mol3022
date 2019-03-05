@@ -13,13 +13,13 @@ class Genomes(Resource):
         list_of_Bedtoolstuples = []
         for i in range(len(list_of_bedtools)):
             list_of_Bedtoolstuples.append((list_of_bedtools[i], list_of_names[i]))
-        print(list_of_bedtools)
+        print(list_of_Bedtoolstuples)
         res = list_of_bedtools[0].jaccard(list_of_bedtools[2])
         sorted = list_of_bedtools[1].sort()
         random_shuffle = sorted.shuffle(genome='hg19', chrom=True, seed=1)
         res2 = list_of_bedtools[0].jaccard(random_shuffle.sort())
         print(res2)
-        return str(res), str(res2)
+        return jsonify(list_of_names)
 
     def post(self):
         parser.add_argument('test', type=str)
