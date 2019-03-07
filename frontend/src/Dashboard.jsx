@@ -56,11 +56,11 @@ export default class Dashboard extends React.Component {
         });
       };
     
-    firstSelectedGene = (firstGene) => {
+    selectFirstGene = (firstGene) => {
       this.setState({firstSelectedGene : firstGene});
     };
 
-    secondSelectedGene = (secondGene) => {
+    selectSecondGene = (secondGene) => {
       this.setState({secondSelectedGene : secondGene});
     };
 
@@ -109,21 +109,18 @@ export default class Dashboard extends React.Component {
       }
       switch (stepIndex) {
         case 0:
-          const { firstSelectedGene } = this.state.firstSelectedGene;
-          const { secondSelectedGene }= this.state.secondSelectedGene;
-
           return (
             <div >
               <Select 
                 name = "select genomes"
-                value = {firstSelectedGene}
-                onChange = {this.firstSelectedGene}
+                value = {this.state.firstSelectedGene}
+                onChange = {this.selectFirstGene}
                 options = {this.state.genomes}
               />
               <Select 
                 name = "select genomes"
-                value = {secondSelectedGene}
-                onChange = {this.secondSelectedGene}
+                value = {this.state.secondSelectedGene}
+                onChange = {this.selectSecondGene}
                 options = {this.state.genomes}
               />
 
