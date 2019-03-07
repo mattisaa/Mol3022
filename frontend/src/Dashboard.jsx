@@ -146,8 +146,7 @@ export default class Dashboard extends React.Component {
           if (this.state.result) {
           return(
           <>
-            <Typography component="h2" variant="headline" gutterBottom>First genome: {this.state.firstSelectedGene.value.toString()}</Typography>
-            <Typography component="h2" variant="headline" gutterBottom>Second genome: {this.state.secondSelectedGene.value.toString()}</Typography>
+            <Typography component="h3" variant="headline" gutterBottom>Results from intersecting {this.state.firstSelectedGene.value.toString()} and {this.state.secondSelectedGene.value.toString()}</Typography>
             <Paper style={style.root}>
               <Table style={style.table}>
                 <TableHead>
