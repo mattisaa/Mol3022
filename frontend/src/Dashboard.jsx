@@ -70,6 +70,7 @@ export default class Dashboard extends React.Component {
     
     calculateIntersect = () => {
         this.setState({ loading: true });
+        
         const firstGene = this.state.firstSelectedGene.value.toString();
         const secondGene = this.state.secondSelectedGene.value.toString();
 
@@ -90,6 +91,30 @@ export default class Dashboard extends React.Component {
           this.setState({result : data});
         });
     };
+
+    calculateJaccardRandom = () => {
+      this.setState({ loading: true });
+
+      const firstGene = this.state.firstSelectedGene.value.toString();
+      const secondGene = this.state.secondSelectedGene.value.toString();
+
+      fetch(`http://localhost:5000/api/calculateRandom`, {
+        method: "POST",
+        body: JSON.stringify({
+        firstGene : firstGene,
+        secondGene: secondGene
+        }),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      })
+      .then(results => results.json())
+      .then(data => {
+        this.setState({loading:false});
+        this.setState({resultRandom : data});
+      });
+    }
 
     getStepContent = (stepIndex) => {
       const override = css`
@@ -186,9 +211,47 @@ export default class Dashboard extends React.Component {
           }
 
         case 2:
-          return(
-            <h2>Comparisson to random intersect</h2>
-          );
+          if (this.state.resultRandom) {
+            return(
+            <>
+              <Typography component="h3" variant="headline" gutterBottom>Results from intersecting {this.state.firstSelectedGene.value.toString()} and {this.state.secondSelectedGene.value.toString()}</Typography>
+              <Paper style={style.root}>
+                <Table style={style.table}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center">Intersection</TableCell>
+                      <TableCell align="center">Jaccard</TableCell>
+                      <TableCell align="center">Number of Intersections</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell align="center">{this.state.resultRandom.intersection}</TableCell>
+                      <TableCell align="center">{this.state.resultRandom.jaccard}</TableCell>
+                      <TableCell align="center">{this.state.resultRandom.n_intersections}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </Paper>
+              </>
+              );
+            }
+
+            else{
+              return(
+                <>
+                  <Typography component="h2" variant="headline" gutterBottom>First genome: {this.state.firstSelectedGene.value.toString()}</Typography>
+                  <Typography component="h2" variant="headline" gutterBottom>Second genome: {this.state.secondSelectedGene.value.toString()}</Typography>
+                  <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={this.calculateJaccardRandom}
+                  >
+                      Calculate Jaccard Random
+                  </Button>
+                </>
+              );
+            }
       }
     }
 
