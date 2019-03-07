@@ -110,13 +110,18 @@ export default class Dashboard extends React.Component {
       });
 
       if (this.state.loading) {
-        return ( <RingLoader
+        return ( 
+        <>
+        <h3>Henter data</h3>
+        <RingLoader
         css={override}
         sizeUnit={"px"}
         size={50}
         color={'#123abc'}
         loading={this.state.loading}
-        />);
+        />
+        </>
+        );
       }
       switch (stepIndex) {
         case 0:
