@@ -1,6 +1,6 @@
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar/AppBar';
-import {get} from './utils/api';
+import {get, post} from './utils/api';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -14,7 +14,8 @@ export default class Dashboard extends React.Component {
         genomes: [],
         firstSelectedGene: '',
         secondSelectedGene: '',
-        loading: true
+        loading: true,
+        result : ''
         
     };
 
@@ -57,6 +58,29 @@ export default class Dashboard extends React.Component {
     getSteps = ()  => {
         return ['Step 1', 'Step 2', 'Step 3'];
     };
+    
+    calculateIntersect = () => {
+        this.setState({ loading: true });
+        const firstGene = this.state.firstSelectedGene.value.toString();
+        const secondGene = this.state.secondSelectedGene.value.toString();
+
+        fetch(`http://localhost:5000/api/genomes`, {
+          method: "POST",
+          body: JSON.stringify({
+          firstGene : firstGene,
+          secondGene: secondGene
+          }),
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          }
+        })
+        .then(results => results.json())
+        .then(data => {
+          this.setState({loading:false});
+          this.setState({result : data});
+        });
+    };
 
     getStepContent = (stepIndex) => {
 
@@ -70,12 +94,12 @@ export default class Dashboard extends React.Component {
 
           return (
             <div >
-                <Select 
-                  name = "select genomes"
-                  value = {firstSelectedGene}
-                  onChange = {this.firstSelectedGene}
-                  options = {this.state.genomes}
-                />
+              <Select 
+                name = "select genomes"
+                value = {firstSelectedGene}
+                onChange = {this.firstSelectedGene}
+                options = {this.state.genomes}
+              />
               <Select 
                 name = "select genomes"
                 value = {secondSelectedGene}
@@ -87,7 +111,13 @@ export default class Dashboard extends React.Component {
           ); 
         case 1 :
           return(
-            <h2>Result of intersecting</h2>
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={this.calculateIntersect}
+            >
+                Calculate Intersect
+            </Button>
           );
 
         case 2:
