@@ -13,8 +13,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-
-
+import { css } from '@emotion/core';
+import { RingLoader } from 'react-spinners';
 
 
 export default class Dashboard extends React.Component {
@@ -92,6 +92,11 @@ export default class Dashboard extends React.Component {
     };
 
     getStepContent = (stepIndex) => {
+      const override = css`
+        display: block;
+        margin: 0 auto;
+        border-color: red;
+      `;
 
       const style = theme =>({
         root : {
@@ -105,7 +110,13 @@ export default class Dashboard extends React.Component {
       });
 
       if (this.state.loading) {
-        return <h3>Henter data..</h3>;
+        return ( <RingLoader
+        css={override}
+        sizeUnit={"px"}
+        size={50}
+        color={'#123abc'}
+        loading={this.state.loading}
+        />);
       }
       switch (stepIndex) {
         case 0:
