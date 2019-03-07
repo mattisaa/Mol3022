@@ -3,8 +3,7 @@ from flask import jsonify, request
 import pybedtools
 from data.data import get_data
 
-
-class Calculate(Resource):
+class CalculateRandom(Resource):
 
     def post(self):
         list_of_names = ['exons', 'cpg', 'fStomach-DS17659', 'fSkin_fibro_bicep_R-DS19745', 'fKidney_renal_cortex_L-DS17550', 'fLung_R-DS15632']
@@ -19,6 +18,6 @@ class Calculate(Resource):
                 indexOfFirstGene = i
             elif secondGene == list_of_names[i]:
                 indexOfSecondGene = i
-        
-        intersect = list_of_bedtools[indexOfFirstGene].jaccard(list_of_bedtools[indexOfSecondGene])
-        return intersect
+        random_shuffle_second_gene = list_of_bedtools[indexOfSecondGene].shuffle(genome='hg19', chrom=True, seed=1)
+        jaccard = list_of_bedtools[indexOfFirstGene].jaccard(random_shuffle_second_gene.sort())
+        return jaccard
