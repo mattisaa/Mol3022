@@ -1,11 +1,21 @@
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar/AppBar';
-import {get, post} from './utils/api';
+import {get} from './utils/api';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import Select from 'react-select'
+import Select from 'react-select';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+
+
+
 
 export default class Dashboard extends React.Component {
 
@@ -15,7 +25,6 @@ export default class Dashboard extends React.Component {
         firstSelectedGene: '',
         secondSelectedGene: '',
         loading: true,
-        result : ''
         
     };
 
@@ -64,7 +73,7 @@ export default class Dashboard extends React.Component {
         const firstGene = this.state.firstSelectedGene.value.toString();
         const secondGene = this.state.secondSelectedGene.value.toString();
 
-        fetch(`http://localhost:5000/api/genomes`, {
+        fetch(`http://localhost:5000/api/calculate`, {
           method: "POST",
           body: JSON.stringify({
           firstGene : firstGene,
@@ -83,6 +92,17 @@ export default class Dashboard extends React.Component {
     };
 
     getStepContent = (stepIndex) => {
+
+      const style = theme =>({
+        root : {
+          width: '100%',
+          marginTop: theme.spacing.unit * 3,
+          overflowX: 'auto',  
+        },
+        table: {
+          minWidth: 700,
+        },
+      });
 
       if (this.state.loading) {
         return <h3>Henter data..</h3>;
@@ -110,15 +130,48 @@ export default class Dashboard extends React.Component {
             </div>
           ); 
         case 1 :
+          if (this.state.result) {
           return(
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={this.calculateIntersect}
-            >
-                Calculate Intersect
-            </Button>
-          );
+          <>
+            <Typography component="h2" variant="headline" gutterBottom>First genome: {this.state.firstSelectedGene.value.toString()}</Typography>
+            <Typography component="h2" variant="headline" gutterBottom>Second genome: {this.state.secondSelectedGene.value.toString()}</Typography>
+            <Paper style={style.root}>
+              <Table style={style.table}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="center">Intersection</TableCell>
+                    <TableCell align="center">Jaccard</TableCell>
+                    <TableCell align="center">Number of Intersections</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                    <TableCell align="center">{this.state.result.intersection}</TableCell>
+                    <TableCell align="center">{this.state.result.jaccard}</TableCell>
+                    <TableCell align="center">{this.state.result.n_intersections}</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </Paper>
+            </>
+            );
+          }
+
+          else{
+            return(
+              <>
+                <Typography component="h2" variant="headline" gutterBottom>First genome: {this.state.firstSelectedGene.value.toString()}</Typography>
+                <Typography component="h2" variant="headline" gutterBottom>Second genome: {this.state.secondSelectedGene.value.toString()}</Typography>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={this.calculateIntersect}
+                >
+                    Calculate Intersect
+                </Button>
+              </>
+            );
+          }
 
         case 2:
           return(
