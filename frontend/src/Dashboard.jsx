@@ -25,6 +25,7 @@ export default class Dashboard extends React.Component {
         firstSelectedGene: '',
         secondSelectedGene: '',
         loading: true,
+        newSelected:false
         
     };
 
@@ -42,6 +43,10 @@ export default class Dashboard extends React.Component {
         this.setState(state => ({
           activeStep: state.activeStep + 1,
         }));
+
+        if(this.state.activeStep === 1){
+          this.setState({newSelected:true});
+        };
     };
 
     handleBack = () => {
@@ -58,10 +63,13 @@ export default class Dashboard extends React.Component {
     
     selectFirstGene = (firstGene) => {
       this.setState({firstSelectedGene : firstGene});
+      this.setState({newSelected: true});
+
     };
 
     selectSecondGene = (secondGene) => {
       this.setState({secondSelectedGene : secondGene});
+      this.setState({newSelected: true});
     };
 
     getSteps = ()  => {
@@ -70,15 +78,14 @@ export default class Dashboard extends React.Component {
     
     calculateIntersect = () => {
         this.setState({ loading: true });
+        this.setState({newSelected: false});
         
-        const firstGene = this.state.firstSelectedGene.value.toString();
-        const secondGene = this.state.secondSelectedGene.value.toString();
 
         fetch(`http://localhost:5000/api/calculate`, {
           method: "POST",
           body: JSON.stringify({
-          firstGene : firstGene,
-          secondGene: secondGene
+          firstGene : this.state.firstSelectedGene.value,
+          secondGene: this.state.secondSelectedGene.value
           }),
           headers: {
             Accept: "application/json",
@@ -94,15 +101,13 @@ export default class Dashboard extends React.Component {
 
     calculateJaccardRandom = () => {
       this.setState({ loading: true });
-
-      const firstGene = this.state.firstSelectedGene.value.toString();
-      const secondGene = this.state.secondSelectedGene.value.toString();
+      this.setState({newSelected: false});
 
       fetch(`http://localhost:5000/api/calculateRandom`, {
         method: "POST",
         body: JSON.stringify({
-        firstGene : firstGene,
-        secondGene: secondGene
+        firstGene : this.state.firstSelectedGene.value,
+        secondGene: this.state.secondSelectedGene.value
         }),
         headers: {
           Accept: "application/json",
@@ -168,7 +173,7 @@ export default class Dashboard extends React.Component {
             </div>
           ); 
         case 1 :
-          if (this.state.result) {
+          if (this.state.result && !(this.state.newSelected)) {
           return(
           <>
             <Typography component="h3" variant="headline" gutterBottom>Results from intersecting {this.state.firstSelectedGene.value.toString()} and {this.state.secondSelectedGene.value.toString()}</Typography>
@@ -211,7 +216,7 @@ export default class Dashboard extends React.Component {
           }
 
         case 2:
-          if (this.state.resultRandom) {
+          if (this.state.resultRandom && !(this.state.newSelected)) {
             return(
             <>
               <Typography component="h3" variant="headline" gutterBottom>Results from intersecting {this.state.firstSelectedGene.value.toString()} and {this.state.secondSelectedGene.value.toString()}</Typography>
@@ -252,6 +257,32 @@ export default class Dashboard extends React.Component {
                 </>
               );
             }
+          case 3:
+          if (this.state.result && this.state.resultRandom){
+            return(
+
+              <>
+              <Typography component="h3" variant="headline" gutterBottom>Comparison between regular and random</Typography>
+              <Paper style={style.root}>
+                <Table style={style.table}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center">Intersection Regular</TableCell>
+                      <TableCell align="center">Intersection Random</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell align="center">{this.state.result.jaccard}</TableCell>
+                      <TableCell align="center">{this.state.resultRandom.jaccard}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </Paper>
+              </>
+
+            );
+          }
       }
     }
 
