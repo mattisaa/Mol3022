@@ -25,8 +25,6 @@ export default class Dashboard extends React.Component {
         firstSelectedGene: '',
         secondSelectedGene: '',
         loading: true,
-        newSelected:false
-        
     };
 
     componentDidMount() {
@@ -44,8 +42,12 @@ export default class Dashboard extends React.Component {
           activeStep: state.activeStep + 1,
         }));
 
-        if(this.state.activeStep === 1){
-          this.setState({newSelected:true});
+        if(this.state.activeStep === 0 ) {
+          this.calculateIntersect();
+        };
+
+        if(this.state.activeStep === 1 ) {
+          this.calculateJaccardRandom();
         };
     };
 
@@ -53,7 +55,7 @@ export default class Dashboard extends React.Component {
         this.setState(state => ({
             activeStep: state.activeStep -1,
         }))
-    }
+    };
 
     handleReset = () => {
         this.setState({
@@ -63,13 +65,11 @@ export default class Dashboard extends React.Component {
     
     selectFirstGene = (firstGene) => {
       this.setState({firstSelectedGene : firstGene});
-      this.setState({newSelected: true});
 
     };
 
     selectSecondGene = (secondGene) => {
       this.setState({secondSelectedGene : secondGene});
-      this.setState({newSelected: true});
     };
 
     getSteps = ()  => {
@@ -78,7 +78,6 @@ export default class Dashboard extends React.Component {
     
     calculateIntersect = () => {
         this.setState({ loading: true });
-        this.setState({newSelected: false});
         
 
         fetch(`http://localhost:5000/api/calculate`, {
@@ -101,7 +100,6 @@ export default class Dashboard extends React.Component {
 
     calculateJaccardRandom = () => {
       this.setState({ loading: true });
-      this.setState({newSelected: false});
 
       fetch(`http://localhost:5000/api/calculateRandom`, {
         method: "POST",
@@ -173,7 +171,7 @@ export default class Dashboard extends React.Component {
             </div>
           ); 
         case 1 :
-          if (this.state.result && !(this.state.newSelected)) {
+          if (this.state.result) {
           return(
           <>
             <Typography component="h3" variant="headline" gutterBottom>Results from intersecting {this.state.firstSelectedGene.value.toString()} and {this.state.secondSelectedGene.value.toString()}</Typography>
@@ -202,21 +200,13 @@ export default class Dashboard extends React.Component {
           else{
             return(
               <>
-                <Typography component="h2" variant="headline" gutterBottom>First genome: {this.state.firstSelectedGene.value.toString()}</Typography>
-                <Typography component="h2" variant="headline" gutterBottom>Second genome: {this.state.secondSelectedGene.value.toString()}</Typography>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={this.calculateIntersect}
-                >
-                    Calculate Intersect
-                </Button>
+                <Typography component="h2" variant="headline" gutterBottom>Please select two genomes</Typography>
               </>
             );
           }
 
         case 2:
-          if (this.state.resultRandom && !(this.state.newSelected)) {
+          if (this.state.resultRandom) {
             return(
             <>
               <Typography component="h3" variant="headline" gutterBottom>Results from intersecting {this.state.firstSelectedGene.value.toString()} and {this.state.secondSelectedGene.value.toString()}</Typography>
@@ -245,18 +235,10 @@ export default class Dashboard extends React.Component {
             else{
               return(
                 <>
-                  <Typography component="h2" variant="headline" gutterBottom>First genome: {this.state.firstSelectedGene.value.toString()}</Typography>
-                  <Typography component="h2" variant="headline" gutterBottom>Second genome: {this.state.secondSelectedGene.value.toString()}</Typography>
-                  <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={this.calculateJaccardRandom}
-                  >
-                      Calculate Jaccard Random
-                  </Button>
+                  <Typography component="h2" variant="headline" gutterBottom>Please select two genomes</Typography>
                 </>
               );
-            }
+          }
           case 3:
           if (this.state.result && this.state.resultRandom){
             return(
@@ -316,7 +298,7 @@ export default class Dashboard extends React.Component {
                 variant="contained"
                 color="primary"
                 onClick={this.handleNext}
-                disabled={activeStep === 3}
+                disabled={activeStep === 3 || !(this.state.firstSelectedGene && this.state.secondSelectedGene)}
               >
                 {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
               </Button>
