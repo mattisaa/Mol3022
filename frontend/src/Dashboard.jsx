@@ -15,6 +15,10 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { css } from '@emotion/core';
 import { RingLoader } from 'react-spinners';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 
 export default class Dashboard extends React.Component {
@@ -25,6 +29,7 @@ export default class Dashboard extends React.Component {
         firstSelectedGene: '',
         secondSelectedGene: '',
         loading: true,
+        open: false
     };
 
     componentDidMount() {
@@ -61,7 +66,19 @@ export default class Dashboard extends React.Component {
         this.setState({
           activeStep: 0,
         });
-      };
+    };
+
+    handleClose = () => {
+      this.setState({
+        open: false,
+      });
+    };
+
+    handleOpen = () => {
+      this.setState({
+        open: true,
+      });
+    };
     
     selectFirstGene = (firstGene) => {
       this.setState({firstSelectedGene : firstGene});
@@ -137,6 +154,10 @@ export default class Dashboard extends React.Component {
         },
       });
 
+      const actions = [
+        <Button label="Lukk" primary={true} onClick={this.handleClose}> close </Button>
+      ];
+
       if (this.state.loading) {
         return ( 
         <>
@@ -154,7 +175,8 @@ export default class Dashboard extends React.Component {
       switch (stepIndex) {
         case 0:
           return (
-            <div >
+            <>
+              <Typography component="h2" variant="headline" gutterBottom style={{'margin':'20px'}}>Select two genomes to intersect</Typography>
               <Select 
                 name = "select genomes"
                 value = {this.state.firstSelectedGene}
@@ -167,32 +189,52 @@ export default class Dashboard extends React.Component {
                 onChange = {this.selectSecondGene}
                 options = {this.state.genomes}
               />
-
-            </div>
+              <div style={{'margin': '20px'}}>
+              <Button variant="outlined" color="primary" onClick={this.handleOpen}>
+                More info
+              </Button>
+              <Dialog
+                      title="Informasjon"
+                      actions={actions}
+                      open={this.state.open}
+                      onClose={this.handleClose}
+              >
+                <DialogTitle id="form-dialog-title">info</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    This application blabla blablablabla blabla blablablabla blabla blablablabla
+                    blabla blablablabla
+                    blabla blablablabla
+                  </DialogContentText>
+                </DialogContent>
+              </Dialog>
+              </div>
+            </>
           ); 
         case 1 :
           if (this.state.result) {
           return(
           <>
-            <Typography component="h3" variant="headline" gutterBottom>Results from intersecting {this.state.firstSelectedGene.value.toString()} and {this.state.secondSelectedGene.value.toString()}</Typography>
-            <Paper style={style.root}>
-              <Table style={style.table}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">Intersection</TableCell>
-                    <TableCell align="center">Jaccard</TableCell>
-                    <TableCell align="center">Number of Intersections</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell align="center">{this.state.result.intersection}</TableCell>
-                    <TableCell align="center">{this.state.result.jaccard}</TableCell>
-                    <TableCell align="center">{this.state.result.n_intersections}</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </Paper>
+              <Typography component="h3" variant="headline" gutterBottom>Results from intersecting {this.state.firstSelectedGene.value.toString()} and {this.state.secondSelectedGene.value.toString()}</Typography>
+              <Paper style={style.root}>
+                <Table style={style.table}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center">Intersection</TableCell>
+                      <TableCell align="center">Jaccard</TableCell>
+                      <TableCell align="center">Number of Intersections</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell align="center">{this.state.result.intersection}</TableCell>
+                      <TableCell align="center">{this.state.result.jaccard}</TableCell>
+                      <TableCell align="center">{this.state.result.n_intersections}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </Paper>
+
             </>
             );
           }
@@ -285,7 +327,7 @@ export default class Dashboard extends React.Component {
              })}
             </Stepper>
             <div >
-              <div style={{'margin': '40px 30% '}}>
+              <div style={{'margin': '20px 30% '}}>
                 {this.getStepContent(activeStep)}
               </div>
               <Button
