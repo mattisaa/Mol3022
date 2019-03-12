@@ -234,6 +234,28 @@ export default class Dashboard extends React.Component {
                   </TableBody>
                 </Table>
               </Paper>
+              <div style={{'margin': '20px'}}>
+              <Button variant="outlined" color="primary" onClick={this.handleOpen}>
+                info about results
+              </Button>
+              <Dialog
+                      title="Informasjon"
+                      actions={actions}
+                      open={this.state.open}
+                      onClose={this.handleClose}
+              >
+                <DialogTitle id="form-dialog-title">Info about results</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    We have used pybedtools function "Jaccard" to compare the genomes. Specifically, it measures the ratio of the number of
+                    intersecting base pairs between two sets to the number of base pairs in the union of the two sets. 
+                    The bedtools jaccard tool implements this statistic, yet modifies the statistic such that the length of 
+                    the intersection is subtracted from the length of the union. As a result, the final statistic ranges from 0.0 to 1.0, 
+                    where 0.0 represents no overlap and 1.0 represent complete overlap.
+                  </DialogContentText>
+                </DialogContent>
+              </Dialog>
+              </div>
 
             </>
             );
@@ -270,6 +292,26 @@ export default class Dashboard extends React.Component {
                   </TableBody>
                 </Table>
               </Paper>
+              <div style={{'margin': '20px'}}>
+              <Button variant="outlined" color="primary" onClick={this.handleOpen}>
+                info about randomized results
+              </Button>
+              <Dialog
+                      title="Informasjon"
+                      actions={actions}
+                      open={this.state.open}
+                      onClose={this.handleClose}
+              >
+                <DialogTitle id="form-dialog-title">Info about randomized results</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    We have used pybedtools function "shuffle" to randomly compare two genomes.
+                    The shuffle method will randomly permute the genomic locations of a feature file 
+                    among a genome defined in a genome file.
+                  </DialogContentText>
+                </DialogContent>
+              </Dialog>
+              </div>
               </>
               );
             }
