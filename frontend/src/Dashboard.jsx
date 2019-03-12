@@ -1,21 +1,11 @@
 import React from 'react';
-import AppBar from '@material-ui/core/AppBar/AppBar';
 import {get} from './utils/api';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import Select from 'react-select';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import { css } from '@emotion/core';
-import { RingLoader } from 'react-spinners';
-
+import DenseAppBar from './Appbar';
+import StepContent from './StepContent';
 
 export default class Dashboard extends React.Component {
 
@@ -25,6 +15,7 @@ export default class Dashboard extends React.Component {
         firstSelectedGene: '',
         secondSelectedGene: '',
         loading: true,
+        open: false
     };
 
     componentDidMount() {
@@ -61,7 +52,19 @@ export default class Dashboard extends React.Component {
         this.setState({
           activeStep: 0,
         });
-      };
+    };
+
+    handleClose = () => {
+      this.setState({
+        open: false,
+      });
+    };
+
+    handleOpen = () => {
+      this.setState({
+        open: true,
+      });
+    };
     
     selectFirstGene = (firstGene) => {
       this.setState({firstSelectedGene : firstGene});
@@ -73,7 +76,7 @@ export default class Dashboard extends React.Component {
     };
 
     getSteps = ()  => {
-        return ['Step 1', 'Step 2', 'Step 3'];
+        return ['Select genomes', 'Compare genomes', 'Compare with shuffled genome'];
     };
     
     calculateIntersect = () => {
@@ -119,162 +122,13 @@ export default class Dashboard extends React.Component {
       });
     }
 
-    getStepContent = (stepIndex) => {
-      const override = css`
-        display: block;
-        margin: 0 auto;
-        border-color: red;
-      `;
-
-      const style = theme =>({
-        root : {
-          width: '100%',
-          marginTop: theme.spacing.unit * 3,
-          overflowX: 'auto',  
-        },
-        table: {
-          minWidth: 700,
-        },
-      });
-
-      if (this.state.loading) {
-        return ( 
-        <>
-        <h3>Henter data</h3>
-        <RingLoader
-        css={override}
-        sizeUnit={"px"}
-        size={50}
-        color={'#123abc'}
-        loading={this.state.loading}
-        />
-        </>
-        );
-      }
-      switch (stepIndex) {
-        case 0:
-          return (
-            <div >
-              <Select 
-                name = "select genomes"
-                value = {this.state.firstSelectedGene}
-                onChange = {this.selectFirstGene}
-                options = {this.state.genomes}
-              />
-              <Select 
-                name = "select genomes"
-                value = {this.state.secondSelectedGene}
-                onChange = {this.selectSecondGene}
-                options = {this.state.genomes}
-              />
-
-            </div>
-          ); 
-        case 1 :
-          if (this.state.result) {
-          return(
-          <>
-            <Typography component="h3" variant="headline" gutterBottom>Results from intersecting {this.state.firstSelectedGene.value.toString()} and {this.state.secondSelectedGene.value.toString()}</Typography>
-            <Paper style={style.root}>
-              <Table style={style.table}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">Intersection</TableCell>
-                    <TableCell align="center">Jaccard</TableCell>
-                    <TableCell align="center">Number of Intersections</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell align="center">{this.state.result.intersection}</TableCell>
-                    <TableCell align="center">{this.state.result.jaccard}</TableCell>
-                    <TableCell align="center">{this.state.result.n_intersections}</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </Paper>
-            </>
-            );
-          }
-
-          else{
-            return(
-              <>
-                <Typography component="h2" variant="headline" gutterBottom>Please select two genomes</Typography>
-              </>
-            );
-          }
-
-        case 2:
-          if (this.state.resultRandom) {
-            return(
-            <>
-              <Typography component="h3" variant="headline" gutterBottom>Results from intersecting {this.state.firstSelectedGene.value.toString()} and {this.state.secondSelectedGene.value.toString()}</Typography>
-              <Paper style={style.root}>
-                <Table style={style.table}>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell align="center">Intersection</TableCell>
-                      <TableCell align="center">Jaccard</TableCell>
-                      <TableCell align="center">Number of Intersections</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center">{this.state.resultRandom.intersection}</TableCell>
-                      <TableCell align="center">{this.state.resultRandom.jaccard}</TableCell>
-                      <TableCell align="center">{this.state.resultRandom.n_intersections}</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </Paper>
-              </>
-              );
-            }
-
-            else{
-              return(
-                <>
-                  <Typography component="h2" variant="headline" gutterBottom>Please select two genomes</Typography>
-                </>
-              );
-          }
-          case 3:
-          if (this.state.result && this.state.resultRandom){
-            return(
-
-              <>
-              <Typography component="h3" variant="headline" gutterBottom>Comparison between regular and random</Typography>
-              <Paper style={style.root}>
-                <Table style={style.table}>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell align="center">Intersection Regular</TableCell>
-                      <TableCell align="center">Intersection Random</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center">{this.state.result.jaccard}</TableCell>
-                      <TableCell align="center">{this.state.resultRandom.jaccard}</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </Paper>
-              </>
-
-            );
-          }
-      }
-    }
-
     render () {
 
         const { activeStep } = this.state;
         const steps = this.getSteps();
         return(
           <div>
-            <AppBar className="header" color="primary" ><h3>Intersect genomes app</h3></AppBar>
+            <DenseAppBar></DenseAppBar>
             <Stepper className="stepper" activeStep={activeStep}  alternativeLabel={true} >
              {steps.map((label) => {
                 return (
@@ -285,9 +139,21 @@ export default class Dashboard extends React.Component {
              })}
             </Stepper>
             <div >
-              <div style={{'margin': '40px 30% '}}>
-                {this.getStepContent(activeStep)}
-              </div>
+              <StepContent 
+                result={this.state.result}
+                resultRandom={this.state.resultRandom}
+                firstSelectedGene={this.state.firstSelectedGene}
+                secondSelectedGene={this.state.secondSelectedGene}
+                selectFirstGene={this.selectFirstGene}
+                selectSecondGene={this.selectSecondGene}
+                handleOpen={this.handleOpen}
+                handleClose={this.handleClose}
+                open={this.state.open}
+                loading={this.state.loading}
+                activeStep={this.state.activeStep}
+                genomes={this.state.genomes}
+
+              />
               <Button
                 disabled={activeStep === 0}
                 onClick={this.handleBack}
