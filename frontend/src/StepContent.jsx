@@ -14,35 +14,38 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import BarChart from 'react-bar-chart';
 
 
 
 export default class StepContent extends React.Component {
 
-    
-    
+    handleBarClick(element, id){
+      console.log(`The bin ${element.text} with id ${id} was clicked`);
+    }
+
     getStepContent = (stepIndex) => {
         const override = css`
         display: block;
         margin: 0 auto;
         border-color: red;
         `;
-        
+
         const style = theme =>({
             root : {
                 width: '100%',
                 marginTop: theme.spacing.unit * 3,
-                overflowX: 'auto',  
+                overflowX: 'auto',
             },
             table: {
                 minWidth: 700,
             },
         });
-        
-        
+
+
         if (this.props.loading) {
-            return ( 
-                <>
+            return (
+                <div>
       <h3>Henter data</h3>
       <RingLoader
       css={override}
@@ -51,21 +54,21 @@ export default class StepContent extends React.Component {
       color={'#123abc'}
       loading={this.props.loading}
       />
-      </>
+  </div>
       );
     }
     switch (stepIndex) {
         case 0:
         return (
-            <>
+            <div>
             <Typography component="h2" variant="headline" gutterBottom style={{'margin':'20px'}}>Select two genomes to intersect</Typography>
-            <Select 
+            <Select
               name = "select genomes"
               value = {this.props.firstSelectedGene}
               onChange = {this.props.selectFirstGene}
               options = {this.props.genomes}
               />
-            <Select 
+            <Select
               name = "select genomes"
               value = {this.props.secondSelectedGene}
               onChange = {this.props.selectSecondGene}
@@ -86,75 +89,72 @@ export default class StepContent extends React.Component {
                 The directory contains 6 BED files. Those starting with “f” for “fetal tissue” reflect Dnase I hypersensitivity sites measured in different fetal tissue
                 samples from the kidney, lung, skin, and stomach.
 
-                In addition: cpg.bed represents CpG islands in the human genome; 
+                In addition: cpg.bed represents CpG islands in the human genome;
                 exons.bed represents RefSeq exons from human genes
                 </DialogContentText>
               </DialogContent>
             </Dialog>
             </div>
-          </>
-        ); 
+          </div>
+        );
         case 1 :
         if (this.props.result) {
             return(
-                <>
-            <Typography component="h3" variant="headline" gutterBottom>Results from intersecting <span style={{'font-style':'italic'}}>{this.props.firstSelectedGene.value}</span> and <span style={{'font-style':'italic'}}>{this.props.secondSelectedGene.value}</span></Typography>
-            <Paper style={style.root}>
-              <Table style={style.table}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">Intersection</TableCell>
-                    <TableCell align="center">Jaccard</TableCell>
-                    <TableCell align="center">Number of Intersections</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell align="center">{this.props.result.intersection}</TableCell>
-                    <TableCell align="center">{this.props.result.jaccard}</TableCell>
-                    <TableCell align="center">{this.props.result.n_intersections}</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </Paper>
-            <div style={{'margin': '20px'}}>
-            <Button variant="outlined" color="primary" onClick={this.props.handleOpen}>
-              info about results
-            </Button>
-            <Dialog
-                    title="Informasjon"
-                    open={this.props.open}
-                    onClose={this.props.handleClose}
-                    >
-              <DialogTitle id="form-dialog-title">Info about results</DialogTitle>
-              <DialogContent>
-                <DialogContentText>
-                  We have used pybedtools function "Jaccard" to compare the genomes. Specifically, it measures the ratio of the number of
-                  intersecting base pairs between two sets to the number of base pairs in the union of the two sets. 
-                  The bedtools jaccard tool implements this statistic, yet modifies the statistic such that the length of 
-                  the intersection is subtracted from the length of the union. As a result, the final statistic ranges from 0.0 to 1.0, 
-                  where 0.0 represents no overlap and 1.0 represent complete overlap.
-                </DialogContentText>
-              </DialogContent>
-            </Dialog>
-            </div>
+                <div>
+                  <Typography component="h3" variant="headline" gutterBottom>Results from intersecting <span style={{'font-style':'italic'}}>{this.props.firstSelectedGene.value}</span> and <span style={{'font-style':'italic'}}>{this.props.secondSelectedGene.value}</span></Typography>
+                  <Paper style={style.root}>
+                    <Table style={style.table}>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell align="center">Intersection</TableCell>
+                          <TableCell align="center">Jaccard</TableCell>
+                          <TableCell align="center">Number of Intersections</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell align="center">{this.props.result.intersection}</TableCell>
+                          <TableCell align="center">{this.props.result.jaccard}</TableCell>
+                          <TableCell align="center">{this.props.result.n_intersections}</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </Paper>
+                  <div style={{'margin': '20px'}}>
+                    <Button variant="outlined" color="primary" onClick={this.props.handleOpen}>
+                      info about results
+                    </Button>
+                    <Dialog
+                            title="Informasjon"
+                            open={this.props.open}
+                            onClose={this.props.handleClose}
+                            >
+                      <DialogTitle id="form-dialog-title">Info about results</DialogTitle>
+                      <DialogContent>
+                        <DialogContentText>
+                          We have used pybedtools function "Jaccard" to compare the genomes. Specifically, it measures the ratio of the number of
+                          intersecting base pairs between two sets to the number of base pairs in the union of the two sets.
+                          The bedtools jaccard tool implements this statistic, yet modifies the statistic such that the length of
+                          the intersection is subtracted from the length of the union. As a result, the final statistic ranges from 0.0 to 1.0,
+                          where 0.0 represents no overlap and 1.0 represent complete overlap.
+                        </DialogContentText>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                </div>
+          );
+        }
 
-          </>
-          );
-        }
-        
-        else{
-            return(
-                <>
+        else {
+            return (
               <Typography component="h2" variant="headline" gutterBottom>Please select two genomes</Typography>
-            </>
           );
         }
-        
+
         case 2:
         if (this.props.resultRandom) {
             return(
-                <>
+                <div>
             <Typography component="h3" variant="headline" gutterBottom>Results from comparing <span style={{'font-style':'italic'}}>{this.props.firstSelectedGene.value}</span> with shuffled <span style={{'font-style':'italic'}}>{this.props.secondSelectedGene.value}</span></Typography>
             <Paper style={style.root}>
               <Table style={style.table}>
@@ -187,28 +187,33 @@ export default class StepContent extends React.Component {
               <DialogContent>
                 <DialogContentText>
                   We have used pybedtools function "shuffle" to randomly compare two genomes.
-                  The shuffle method will randomly permute the genomic locations of a feature file 
+                  The shuffle method will randomly permute the genomic locations of a feature file
                   among a genome defined in a genome file.
                 </DialogContentText>
               </DialogContent>
             </Dialog>
             </div>
-            </>
+          </div>
             );
         }
-        
+
         else{
             return(
-                <>
+                <div>
                 <Typography component="h2" variant="headline" gutterBottom>Please select two genomes</Typography>
-              </>
+              </div>
             );
         }
         case 3:
         if (this.props.result && this.props.resultRandom){
+          const data = [
+              {text: 'Intersection Regular', value: this.props.result.jaccard},
+              {text: 'Intersection Random', value: this.props.resultRandom.jaccard}
+            ];
+          const margin = {top: 20, right: 20, bottom: 30, left: 40};
             return(
-                
-                <>
+
+                <div>
             <Typography component="h3" variant="headline" gutterBottom>Comparison between regular and random</Typography>
             <Paper style={style.root}>
               <Table style={style.table}>
@@ -225,11 +230,20 @@ export default class StepContent extends React.Component {
                   </TableRow>
                 </TableBody>
               </Table>
+              <BarChart ylabel='Jaccard'
+                  width={400}
+                  height={300}
+                  data={data}
+                  margin={margin}
+                  onBarClick={this.handleBarClick}/>
             </Paper>
-            </>
+          </div>
 
             );
             }
+        break;
+        default:
+          return <span>¯\_(ツ)_/¯</span>
         }
     }
 
