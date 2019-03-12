@@ -201,9 +201,11 @@ export default class Dashboard extends React.Component {
                 <DialogTitle id="form-dialog-title">info</DialogTitle>
                 <DialogContent>
                   <DialogContentText>
-                    This application blabla blablablabla blabla blablablabla blabla blablablabla
-                    blabla blablablabla
-                    blabla blablablabla
+                  The directory contains 6 BED files. Those starting with “f” for “fetal tissue” reflect Dnase I hypersensitivity sites measured in different fetal tissue
+                  samples from the kidney, lung, skin, and stomach.
+
+                  In addition: cpg.bed represents CpG islands in the human genome; 
+                  exons.bed represents RefSeq exons from human genes
                   </DialogContentText>
                 </DialogContent>
               </Dialog>
