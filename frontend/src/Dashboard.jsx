@@ -1,5 +1,4 @@
 import React from 'react';
-import AppBar from '@material-ui/core/AppBar/AppBar';
 import {get} from './utils/api';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -19,7 +18,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
+import DenseAppBar from './Appbar';
 
 export default class Dashboard extends React.Component {
 
@@ -90,7 +89,7 @@ export default class Dashboard extends React.Component {
     };
 
     getSteps = ()  => {
-        return ['Step 1', 'Step 2', 'Step 3'];
+        return ['Select genomes', 'Compare genomes', 'Compare with shuffled genome'];
     };
     
     calculateIntersect = () => {
@@ -215,7 +214,7 @@ export default class Dashboard extends React.Component {
           if (this.state.result) {
           return(
           <>
-              <Typography component="h3" variant="headline" gutterBottom>Results from intersecting {this.state.firstSelectedGene.value.toString()} and {this.state.secondSelectedGene.value.toString()}</Typography>
+              <Typography component="h3" variant="headline" gutterBottom>Results from intersecting <span style={{'font-style':'italic'}}>{this.state.firstSelectedGene.value}</span> and <span style={{'font-style':'italic'}}>{this.state.secondSelectedGene.value}</span></Typography>
               <Paper style={style.root}>
                 <Table style={style.table}>
                   <TableHead>
@@ -273,12 +272,12 @@ export default class Dashboard extends React.Component {
           if (this.state.resultRandom) {
             return(
             <>
-              <Typography component="h3" variant="headline" gutterBottom>Results from intersecting {this.state.firstSelectedGene.value.toString()} and {this.state.secondSelectedGene.value.toString()}</Typography>
+              <Typography component="h3" variant="headline" gutterBottom>Results from comparing <span style={{'font-style':'italic'}}>{this.state.firstSelectedGene.value}</span> with shuffled <span style={{'font-style':'italic'}}>{this.state.secondSelectedGene.value}</span></Typography>
               <Paper style={style.root}>
                 <Table style={style.table}>
                   <TableHead>
                     <TableRow>
-                      <TableCell align="center">Intersection</TableCell>
+                      <TableCell align="center">Length of basepair intersection</TableCell>
                       <TableCell align="center">Jaccard</TableCell>
                       <TableCell align="center">Number of Intersections</TableCell>
                     </TableRow>
@@ -358,7 +357,7 @@ export default class Dashboard extends React.Component {
         const steps = this.getSteps();
         return(
           <div>
-            <AppBar className="header" color="primary" ><h3>Intersect genomes app</h3></AppBar>
+            <DenseAppBar></DenseAppBar>
             <Stepper className="stepper" activeStep={activeStep}  alternativeLabel={true} >
              {steps.map((label) => {
                 return (
