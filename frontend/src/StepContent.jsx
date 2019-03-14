@@ -238,8 +238,6 @@ export default class StepContent extends React.Component {
               {text: 'Intersection Regular', value: this.props.result.jaccard},
               {text: 'Intersection Random', value: this.props.resultRandom.jaccard}
             ];
-          const margin = {top: 20, right: 20, bottom: 30, left: 40};
-          const barData = [data[0].value, data[1].value]
 
             return(
 
