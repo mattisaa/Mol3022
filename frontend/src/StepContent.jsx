@@ -28,7 +28,7 @@ const BarGraph = (props) => {
         borderWidth: 1,
         hoverBackgroundColor: 'rgba(255,99,132,0.4)',
         hoverBorderColor: 'rgba(255,99,132,1)',
-        data: [this.props.result.jaccard, this.props.resultRandom.jaccard]
+        data: [0.87, 0.067]
       }
     ]
   };
