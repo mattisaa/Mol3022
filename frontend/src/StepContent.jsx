@@ -18,23 +18,31 @@ import { Bar } from 'react-chartjs-2';
 
 const BarGraph = (props) => {
 
+  const options={
+  legend: {
+      display: false,
+  }
+}
+
   const data = {
     labels: ['Genome 1', 'Genome 2'],
+
     datasets: [
       {
-        label: 'Value',
         backgroundColor: 'rgba(255,99,132,0.2)',
         borderColor: 'rgba(255,99,132,1)',
         borderWidth: 1,
         hoverBackgroundColor: 'rgba(255,99,132,0.4)',
         hoverBorderColor: 'rgba(255,99,132,1)',
-        data: [0.87, 0.067]
+        data: [props.jaccards[0], props.jaccards[1]]
       }
     ]
   };
 
   return (
-    <Bar data={data} />
+    <Bar
+    data={data}
+    options={options} />
   )
 }
 
@@ -252,8 +260,7 @@ export default class StepContent extends React.Component {
                   </TableRow>
                 </TableBody>
               </Table>
-              <BarGraph
-              data = {data}/>
+              <BarGraph jaccards = {[this.props.result.jaccard, this.props.resultRandom.jaccard]}/>
             </Paper>
           </div>
 
