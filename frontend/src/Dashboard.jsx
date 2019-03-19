@@ -85,7 +85,6 @@ export default class Dashboard extends React.Component {
         const { firstSelectedGene, secondSelectedGene } = this.state
         const data = { firstGene: firstSelectedGene.value, secondGene: secondSelectedGene.value}
         post('calculate', data).then(({data}) => {
-            console.log(data);
             this.setState({loading:false, result: data});
           });
 
