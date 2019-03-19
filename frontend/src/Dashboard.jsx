@@ -93,23 +93,12 @@ export default class Dashboard extends React.Component {
     calculateJaccardRandom = () => {
       this.setState({ loading: true });
 
-      fetch(`http://localhost:5000/api/calculateRandom`, {
-        method: "POST",
-        body: JSON.stringify({
-        firstGene : this.state.firstSelectedGene.value,
-        secondGene: this.state.secondSelectedGene.value
-        }),
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      })
-      .then(results => results.json())
-      .then(data => {
-        this.setState({loading:false});
-        this.setState({resultRandom : data});
+      const { firstSelectedGene, secondSelectedGene } = this.state
+      const data = { firstGene: firstSelectedGene.value, secondGene: secondSelectedGene.value}
+      post('calculateRandom', data).then(({data}) => {
+        this.setState({loading:false, resultRandom:data})
       });
-    }
+    };
 
     render () {
 

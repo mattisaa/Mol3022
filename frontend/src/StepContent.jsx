@@ -234,11 +234,6 @@ export default class StepContent extends React.Component {
         }
         case 3:
         if (this.props.result && this.props.resultRandom){
-          const data = [
-              {text: 'Intersection Regular', value: this.props.result.jaccard},
-              {text: 'Intersection Random', value: this.props.resultRandom.jaccard}
-            ];
-
             return(
 
                 <div>
