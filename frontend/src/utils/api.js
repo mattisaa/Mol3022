@@ -1,9 +1,10 @@
 import axios from 'axios';
-import { API_URL } from '../config';
+import { API_URL, HEADERS } from '../config';
 
 const api = axios.create({
   baseURL: API_URL,
   crossDomain: true,
+  headers: HEADERS
 });
 
 export function get(url) {

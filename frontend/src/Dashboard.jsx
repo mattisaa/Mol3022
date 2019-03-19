@@ -1,5 +1,5 @@
 import React from 'react';
-import {get} from './utils/api';
+import {get, post} from './utils/api';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -20,6 +20,7 @@ export default class Dashboard extends React.Component {
 
     componentDidMount() {
       get('genomes').then(({data}) => {
+          console.log(data);
           this.setState({loading:false});
           const genomes = data.map(genome => {
             return {label: genome, value: genome};
@@ -65,7 +66,7 @@ export default class Dashboard extends React.Component {
         open: true,
       });
     };
-    
+
     selectFirstGene = (firstGene) => {
       this.setState({firstSelectedGene : firstGene});
 
@@ -78,27 +79,16 @@ export default class Dashboard extends React.Component {
     getSteps = ()  => {
         return ['Select genomes', 'Compare genomes', 'Compare with shuffled genome'];
     };
-    
+
     calculateIntersect = () => {
         this.setState({ loading: true });
-        
+        const { firstSelectedGene, secondSelectedGene } = this.state
+        const data = { firstGene: firstSelectedGene.value, secondGene: secondSelectedGene.value}
+        post('calculate', data).then(({data}) => {
+            console.log(data);
+            this.setState({loading:false, result: data});
+          });
 
-        fetch(`http://localhost:5000/api/calculate`, {
-          method: "POST",
-          body: JSON.stringify({
-          firstGene : this.state.firstSelectedGene.value,
-          secondGene: this.state.secondSelectedGene.value
-          }),
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          }
-        })
-        .then(results => results.json())
-        .then(data => {
-          this.setState({loading:false});
-          this.setState({result : data});
-        });
     };
 
     calculateJaccardRandom = () => {
@@ -139,7 +129,7 @@ export default class Dashboard extends React.Component {
              })}
             </Stepper>
             <div >
-              <StepContent 
+              <StepContent
                 result={this.state.result}
                 resultRandom={this.state.resultRandom}
                 firstSelectedGene={this.state.firstSelectedGene}
