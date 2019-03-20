@@ -1,8 +1,8 @@
 # MOL3022
 
 #### Backend and Frontend are running at Heroku and Firebase
-Link to frontend: https://mol3022.firebaseapp.com
-Link to backend: https://mol3022-api.herokuapp.com
+- Link to frontend: https://mol3022.firebaseapp.com
+- Link to backend: https://mol3022-api.herokuapp.com
 
 ## Backend:
 
