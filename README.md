@@ -10,6 +10,7 @@
 - Python3.7
 - pip[10.0 - 19.0.2]
 - virtualenv
+- bedtools
 
 #### Initial setup
 ```
