@@ -20,7 +20,6 @@ export default class Dashboard extends React.Component {
 
     componentDidMount() {
       get('genomes').then(({data}) => {
-          console.log(data);
           this.setState({loading:false});
           const genomes = data.map(genome => {
             return {label: genome, value: genome};

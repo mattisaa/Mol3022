@@ -25,7 +25,7 @@ const BarGraph = (props) => {
 }
 
   const data = {
-    labels: ['Genome 1', 'Genome 2'],
+    labels: ['Genome regular', 'Genome random'],
 
     datasets: [
       {
@@ -47,10 +47,6 @@ const BarGraph = (props) => {
 }
 
 export default class StepContent extends React.Component {
-
-    handleBarClick(element, id){
-      console.log(`The bin ${element.text} with id ${id} was clicked`);
-    }
 
     getStepContent = (stepIndex) => {
         const override = css`
@@ -74,7 +70,7 @@ export default class StepContent extends React.Component {
         if (this.props.loading) {
             return (
                 <div>
-      <h3>Henter data</h3>
+      <h3>Fetching data</h3>
       <RingLoader
       css={override}
       sizeUnit={"px"}
@@ -129,7 +125,7 @@ export default class StepContent extends React.Component {
         if (this.props.result) {
             return(
                 <div>
-                  <Typography component="h3" variant="headline" gutterBottom>Results from intersecting <span style={{'font-style':'italic'}}>{this.props.firstSelectedGene.value}</span> and <span style={{'font-style':'italic'}}>{this.props.secondSelectedGene.value}</span></Typography>
+                  <Typography component="h3" variant="headline" gutterBottom>Resulting overlap between <span style={{'font-style':'italic'}}>{this.props.firstSelectedGene.value}</span> and <span style={{'font-style':'italic'}}>{this.props.secondSelectedGene.value}</span></Typography>
                   <Paper style={style.root}>
                     <Table style={style.table}>
                       <TableHead>
@@ -183,7 +179,7 @@ export default class StepContent extends React.Component {
         if (this.props.resultRandom) {
             return(
                 <div>
-            <Typography component="h3" variant="headline" gutterBottom>Results from comparing <span style={{'font-style':'italic'}}>{this.props.firstSelectedGene.value}</span> with shuffled <span style={{'font-style':'italic'}}>{this.props.secondSelectedGene.value}</span></Typography>
+            <Typography component="h3" variant="headline" gutterBottom>Resulting overlap between <span style={{'font-style':'italic'}}>{this.props.firstSelectedGene.value}</span> and shuffled <span style={{'font-style':'italic'}}>{this.props.secondSelectedGene.value}</span></Typography>
             <Paper style={style.root}>
               <Table style={style.table}>
                 <TableHead>
@@ -234,11 +230,6 @@ export default class StepContent extends React.Component {
         }
         case 3:
         if (this.props.result && this.props.resultRandom){
-          const data = [
-              {text: 'Intersection Regular', value: this.props.result.jaccard},
-              {text: 'Intersection Random', value: this.props.resultRandom.jaccard}
-            ];
-
             return(
 
                 <div>
@@ -247,8 +238,8 @@ export default class StepContent extends React.Component {
               <Table style={style.table}>
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">Intersection Regular</TableCell>
-                    <TableCell align="center">Intersection Random</TableCell>
+                    <TableCell align="center">Jaccard coefficient Regular</TableCell>
+                    <TableCell align="center">Jaccard coefficient Random</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
