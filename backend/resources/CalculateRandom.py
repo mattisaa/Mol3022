@@ -18,6 +18,6 @@ class CalculateRandom(Resource):
                 indexOfFirstGene = i
             elif secondGene == list_of_names[i]:
                 indexOfSecondGene = i
-        random_shuffle_second_gene = list_of_bedtools[indexOfSecondGene].shuffle(genome='hg19', chrom=True, seed=1)
+        random_shuffle_second_gene = list_of_bedtools[indexOfSecondGene].shuffle(genome='hg19', chrom=True)
         jaccard = list_of_bedtools[indexOfFirstGene].jaccard(random_shuffle_second_gene.sort())
         return jaccard
